@@ -1,5 +1,5 @@
 # Firefox OS Camera Download ![Camera Download](https://raw.githubusercontent.com/SunboX/fxos_Camera_Download/master/src/style/icons/CameraDownload_84.png) 
-This app allows to view and download images from a DLNA / uPnP enabled photo camera like the ones from Sony. It behaves like the Sony PlayMemories Mobile app and was tested using a Sony NEX-6 camera.
+This app allows to view and download images from any DLNA / uPnP enabled photo camera like the ones from Sony. It behaves like the Sony PlayMemories Mobile app and was tested using a Sony NEX-6 camera.
 
 Connecting your camera with a Firefox OS smartphone via Wi-Fi you can enjoy sending high quality photos to your smartphone or tablet.
 
