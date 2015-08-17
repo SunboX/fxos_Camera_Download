@@ -12,6 +12,10 @@ Connecting your camera with a Firefox OS smartphone via Wi-Fi you can enjoy send
 
 ## Development
 
+Dependencies are installed and managed via [npm](https://www.npmjs.com/), the [Node.js](https://nodejs.org/) package manager. This project requires stable Node.js versions `>= 0.8.0`. Odd version numbers of Node.js are considered unstable development versions.
+
+Before setting up the project ensure that your npm is up-to-date by running `npm update -g npm` (this might require `sudo` on certain systems).
+
 ### Get all dependencies
 ```bash
 sh ./setup_after_checkout.sh
