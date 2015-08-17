@@ -1,0 +1,50 @@
+
+.menu-item {
+  position: static;
+}
+
+.menu-item:has(.icon) {
+  -moz-padding-start: 5.5rem;
+}
+
+.menu-item .icon {
+  position: absolute;
+  width: 3rem;
+  height: 3rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -1.5rem;
+  line-height: 0;
+}
+
+a.menu-item:after {
+  font-family: "gaia-icons";
+  content: "forward-light";
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 25px;
+  line-height: 6rem;
+  color: #FFF;
+}
+
+a.menu-item:active:after {
+  color: #91aab0;
+}
+
+label > .menu-item {
+  left: 1.5rem;
+}
+
+label > .menu-item + small {
+  margin: 0;
+  -moz-margin-start: 4rem;
+  padding: 0;
+}
+
+.menu-item-desc {
+  left: 4rem;
+}

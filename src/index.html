@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="theme-color" content="#242d33">
+
+    <link href="shared/elements/gaia-icons/gaia-icons-embedded.css" rel="stylesheet">
+    <link href="shared/style/headers.css" rel="stylesheet">
+    <link href="shared/style/progress_activity.css" rel="stylesheet">
+    <link href="style/progress.css" rel="stylesheet">
+    <link href="style/service_manager.css" rel="stylesheet">
+    <link href="style/lists.css" rel="stylesheet">
+    <link href="style/icons.css" rel="stylesheet">
+    <link href="style/confirm.css" rel="stylesheet">
+    <link href="style/camera_download.css" rel="stylesheet">
+  </head>
+  <body role="application" class="theme-media">
+    
+    <section role="region" id="device-select-view" class="skin-dark">
+      
+      <header>
+        <h1>Choose a Device</h1>
+      </header>
+      
+      <ul id="device-list"></ul>
+      
+      <div id="device-loading-indicator">
+        <progress></progress>
+      </div>
+      
+      <footer id="device-select-toolbar" class="tiny-only" role="toolbar">
+        <a id="devices-reload-button-tiny" class="button" data-icon="reload" role="button" data-l10n-id=""></a>
+      </footer>
+      
+    </section>
+    
+    <section role="region" id="thumbnail-view" class="skin-dark">
+      
+      <header>
+        <button id="back-to-device-selection"><span class="icon icon-back">back</span></button>
+        <h1>Photos</h1>
+      </header>
+      
+      <div class="throb" id="throbber"></div>
+      
+      <ul id="thumbnails"></ul>
+      
+      <footer id="thumbnail-toolbar" class="tiny-only" role="toolbar">
+        <a id="thumbnail-reload-button-tiny" class="button" data-icon="reload" role="button" data-l10n-id=""></a>
+      </footer>
+      
+    </section>
+    
+    <section role="region" id="fullscreen-view" class="skin-dark">
+      
+      <button id="fullscreen-back-button-tiny" type="reset" class="tiny-only" data-icon="back" data-l10n-id=""></button>
+      
+      <div id="frames">
+        <!-- the current photo plus next and previous waiting in the wings -->
+        <section id="frame1" class="frame"></section>
+        <section id="frame2" class="frame"></section>
+        <section id="frame3" class="frame"></section>
+      </div>
+      
+      <footer id="fullscreen-toolbar" class="tiny-only" role="toolbar">
+        <a id="fullscreen-download-button-tiny" class="button" data-icon="download" data-l10n-id="download-button" role="button"></a>
+      </footer>
+      
+    </section>
+    
+    <form data-type="confirm" id="loading-overlay" role="dialog" class="hide no-opacity">
+      <section id="progress-activity" class="hide">
+        <h1 id="progress-title"></h1>
+        <p role="status">
+          <span id="progress-msg"></span>
+          <progress id="progress-element" class="pack-activity" value="0" max="100"></progress>
+        </p>
+        <menu>
+          <button data-l10n-id="cancel" id="cancel-overlay">Cancel</button>
+        </menu>
+      </section>
+    </form>
+    
+    <script type="text/javascript" src="js/lib/ssdp/ssdp.js"></script>
+    <script type="text/javascript" src="js/lib/plug.play/plug.upnp.js"></script>
+    <script type="text/javascript" src="js/lib/plug.play/ContentDirectory/plug.upnp_contentdirectory.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="js/globals.js"></script>
+    <script type="text/javascript" src="js/blobview.js"></script>
+    <script type="text/javascript" src="js/jpeg_metadata_parser.js"></script>
+    <script type="text/javascript" src="js/gesture_detector.js"></script>
+    <script type="text/javascript" src="js/file_handler.js"></script>
+    <script type="text/javascript" src="js/image_utils.js"></script>
+    <script type="text/javascript" src="js/image_downloader.js"></script>
+    <script type="text/javascript" src="js/downsample.js"></script>
+    <script type="text/javascript" src="js/thumbnail_item.js"></script>
+    <script type="text/javascript" src="js/thumbnails.js"></script>
+    <script type="text/javascript" src="js/services.js"></script>
+    <script type="text/javascript" src="js/content_directory_manager.js"></script>
+    <script type="text/javascript" src="js/media_frame.js"></script>
+    <script type="text/javascript" src="js/frames.js"></script>
+    <script type="text/javascript" src="js/overlay.js"></script>
+    <script type="text/javascript" src="js/uri.js"></script>
+    <script type="text/javascript" src="js/startup.js"></script>
+  </body>
+</html>

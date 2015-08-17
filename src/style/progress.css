@@ -1,0 +1,37 @@
+/* the indeterminate progress bar displayed while scanning */
+#throbber {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0.3rem;
+  border: none;
+  overflow: hidden;
+  background-size: 1rem;
+  background-image: repeating-linear-gradient(135deg,
+                                              #000 0%,  #000 42%,
+                                              #32D1F2 42%, #32D1F2 57%,
+                                              #000 57%, #000 100%);
+  z-index: 10; /* has to be higher than pick-top */
+}
+
+#throbber.throb {
+  animation: throb 1s steps(10) infinite;
+}
+
+@keyframes throb {
+  from { background-position: 0 0; }
+  to   { background-position: -1rem 0; }
+}
+
+#spinner {
+  position: absolute;
+  top: calc(50% - 1.5rem);
+  left: calc(50% - 1.5rem);
+  z-index: 1000;
+}
+
+/* override progress_activity.css */
+#spinner.hidden {
+  display: none;
+}

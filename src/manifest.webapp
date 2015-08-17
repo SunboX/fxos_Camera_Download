@@ -1,0 +1,26 @@
+{
+    "name": "Camera Download",
+    "description": "DLNA Camera Image Downloader",
+    "launch_path": "/index.html",
+    "developer": {
+        "name": "",
+        "url": ""
+    },
+    "type": "privileged",
+    "permissions": {
+        "systemXHR": {},
+        "udp-socket": {},
+        "desktop-notification": {},
+        "device-storage:pictures": {
+            "access": "readwrite"
+        }
+    },
+    "default_locale": "en-US",
+    "icons": {
+        "84": "/style/icons/CameraDownload_84.png",
+        "126": "/style/icons/CameraDownload_126.png",
+        "142": "/style/icons/CameraDownload_142.png",
+        "189": "/style/icons/CameraDownload_189.png",
+        "284": "/style/icons/CameraDownload_284.png"
+    }
+}
