@@ -68,7 +68,7 @@
                             var filename = 'photo/' + d.toISOString().slice(0, -5).replace(/[:T]/g, '-') + '.jpg';
 
                             var saveRequest = storage.addNamed(blob, filename);
-                            saveRequest.onsuccess = (function () {
+                            saveRequest.onsuccess = (function() {
                                 // Vibrate when the image is saved
                                 navigator.vibrate(100);
 
@@ -76,7 +76,7 @@
                                 self.notify('Photo saved to Gallery', filename);
                             }).bind(this);
 
-                            saveRequest.onerror = (function () {
+                            saveRequest.onerror = (function() {
                                 navigator.vibrate(100);
                                 self.notify('Saving the photo failed', saveRequest.error.name);
                             }).bind(this);
