@@ -8,10 +8,17 @@
     },
     "type": "privileged",
     "permissions": {
-        "systemXHR": {},
-        "udp-socket": {},
-        "desktop-notification": {},
+        "systemXHR": {
+            "description": "For requesting the camera API"
+        },
+        "udp-socket": {
+            "description": "For connecting to the camera"
+        },
+        "desktop-notification": {
+            "description": "For sending notifications"
+        },
         "device-storage:pictures": {
+            "description": "For writing photos to the storage",
             "access": "readwrite"
         }
     },
