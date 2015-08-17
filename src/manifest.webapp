@@ -11,9 +11,6 @@
         "systemXHR": {
             "description": "For requesting the camera API"
         },
-        "udp-socket": {
-            "description": "For connecting to the camera"
-        },
         "desktop-notification": {
             "description": "For sending notifications"
         },
