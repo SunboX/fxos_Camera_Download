@@ -22,6 +22,9 @@ sh ./setup_after_checkout.sh
 sh ./build.sh
 ```
 
+During development I recommend using the [Universal Media Server](http://www.universalmediaserver.com/) instead of a real camera. It's more easily to restart, to change the media and it runs on your development machine.
+Universal Media Server is a free and regularly updated media server capable of serving videos, audio and images to any DLNA-capable device.
+
 ## Screenshots
 
 <img src="https://raw.githubusercontent.com/SunboX/fxos_Camera_Download/master/screenshots/2015-06-23-12-12-20.png" width="300"/>
