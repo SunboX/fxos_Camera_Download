@@ -14,6 +14,9 @@
         "desktop-notification": {
             "description": "For sending notifications"
         },
+        "udp-socket": {
+            "description": "For connecting to the camera"
+        },
         "device-storage:pictures": {
             "description": "For writing photos to the storage",
             "access": "readwrite"
