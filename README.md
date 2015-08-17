@@ -17,13 +17,27 @@ Dependencies are installed and managed via [npm](https://www.npmjs.com/), the [N
 Before setting up the project ensure that your npm is up-to-date by running `npm update -g npm` (this might require `sudo` on certain systems).
 
 ### Get all dependencies
+
+**Mac OS X, Linux**
 ```bash
 sh ./setup_after_checkout.sh
 ```
 
+**Windows**
+```bash
+setup_after_checkout.bat
+```
+
 ### Cleanup the code and build the packaged app
+
+**Mac OS X, Linux**
 ```bash
 sh ./build.sh
+```
+
+**Windows**
+```bash
+build.bat
 ```
 
 During development I recommend using the [Universal Media Server](http://www.universalmediaserver.com/) instead of a real camera. It's more easily to restart, to change the media and it runs on your development machine.
