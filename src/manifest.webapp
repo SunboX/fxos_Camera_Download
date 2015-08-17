@@ -3,8 +3,8 @@
     "description": "DLNA Camera Image Downloader",
     "launch_path": "/index.html",
     "developer": {
-        "name": "",
-        "url": ""
+        "name": "André Fiedler",
+        "url": "https://github.com/SunboX"
     },
     "type": "privileged",
     "permissions": {
