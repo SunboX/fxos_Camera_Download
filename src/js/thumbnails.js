@@ -59,7 +59,11 @@
             if (insertBeforeThumbnail === null) {
                 thumbnailGroup.appendChild(thumbnail);
             } else {
-                thumbnailGroup.insertBefore(thumbnail, insertBeforeThumbnail);
+                try {
+                    thumbnailGroup.insertBefore(thumbnail, insertBeforeThumbnail);
+                } catch (ex) {
+                    thumbnailGroup.appendChild(thumbnail);
+                }
             }
         },
 
@@ -96,16 +100,30 @@
 
             // Check if there's already a thumbnail image loaded
             if (filedata.metadata.thumbnail) {
+                var thumbnailWrapper = document.createElement('div');
+                thumbnailWrapper.className = 'thumbnail-wrapper';
                 var thumbnail = new ThumbnailItem(filedata);
                 thumbnail.htmlNode.dataset.date = filedata.date;
-                return thumbnail.htmlNode;
+                thumbnailWrapper.appendChild(thumbnail.htmlNode);
+
+                var checkbox = document.createElement('label');
+                checkbox.className = 'pack-checkbox';
+                var checkboxInput = document.createElement('input');
+                checkboxInput.type = 'checkbox';
+                checkbox.appendChild(checkboxInput);
+                var checkboxSpan = document.createElement('span');
+                checkbox.appendChild(checkboxSpan);
+
+                thumbnailWrapper.appendChild(checkbox);
+
+                return thumbnailWrapper;
             }
             // If not, create a placeholder with loading indicator
             // and try to download and create the thumbnail image
             else {
                 var thumbnailPlaceholder = document.createElement('div');
                 thumbnailPlaceholder.role = 'button';
-                thumbnailPlaceholder.className = 'thumbnail';
+                thumbnailPlaceholder.className = 'thumbnail-wrapper';
                 thumbnailPlaceholder.dataset.date = filedata.date;
 
                 var progress = document.createElement('progress');
@@ -113,7 +131,9 @@
 
                 this.loadThumbnail(filedata, function(placeholder, filedata) {
                     var thumbnail = this.createThumbnail(filedata);
-                    placeholder.parentNode.replaceChild(thumbnail, placeholder);
+                    if (placeholder.parentNode) {
+                        placeholder.parentNode.replaceChild(thumbnail, placeholder);
+                    }
                 }.bind(this, thumbnailPlaceholder));
 
                 return thumbnailPlaceholder;
@@ -315,16 +335,45 @@
             category.dataset.date = filedata.date;
             category.id = 'category-' + dateStr;
 
-            var folderElem = document.createElement('div');
-            folderElem.textContent = dateStr;
-            folderElem.className = 'thumbnail-group-header';
-            category.appendChild(folderElem);
+            var checkbox = document.createElement('label');
+            checkbox.className = 'pack-checkbox thumbnail-group-header';
+            var checkboxInput = document.createElement('input');
+            checkboxInput.type = 'checkbox';
+            checkbox.appendChild(checkboxInput);
+            var checkboxSpan = document.createElement('span');
+            checkboxSpan.textContent = dateStr;
+            checkbox.appendChild(checkboxSpan);
+            category.appendChild(checkbox);
+
+            checkboxInput.onchange = this.setCheckboxesOfCategory.bind(this, checkboxInput, category);
 
             var thumbnailGroupContainer = document.createElement('div');
             thumbnailGroupContainer.className = 'thumbnail-group-container';
             category.appendChild(thumbnailGroupContainer);
 
             return category;
+        },
+
+        setCheckboxesOfCategory: function(checkbox, category, e) {
+            var state = checkbox.checked,
+                thumbnailCheckboxes = category.querySelectorAll('.thumbnail-wrapper .pack-checkbox input');
+            for (var thumbnailCheckbox of thumbnailCheckboxes) {
+                thumbnailCheckbox.checked = state;
+            }
+        },
+
+        getAllCheckedFiles: function() {
+            var thumbnails = this.container.querySelectorAll('.thumbnail-wrapper'),
+                image, checkbox, files = [];
+            for (var thumbnail of thumbnails) {
+                image = thumbnail.querySelector('.thumbnailImage');
+                checkbox = thumbnail.querySelector('.pack-checkbox input');
+                if (!image || !checkbox || !checkbox.checked) {
+                    continue;
+                }
+                files.push(this.fileHandler.getFileByName(image.dataset.filename));
+            }
+            return files;
         },
 
         removeAll: function() {

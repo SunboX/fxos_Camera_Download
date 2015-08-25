@@ -28,68 +28,103 @@
             }
         },
 
-        downloadImages: function(filedatas) {
-            //TODO: Implement multi download
+        downloadImage: function(filedata) {
+            this.downloadImages([filedata]);
         },
 
-        downloadImage: function(filedata) {
-            var self = this;
-            if (filedata) {
+        downloadImages: function(filedatas) {
+            var self = this,
+                filedata;
+            if (filedatas && filedatas.length) {
 
                 var progress = utils.overlay.show('Downloading Image', 'progressBar');
-                progress.setTotal(1);
+                progress.setTotal(filedatas.length);
 
-                utils.overlay.oncancel = function() {
-                    utils.overlay.hide();
-                };
+                var progressTotal = [];
 
-                // Try to get the best fitting image link
-                var imgLink = filedata.href.linkLRG || filedata.href.linkMED || filedata.href.linkSM || filedata.href.linkTN || filedata.href.linkUnknown;
+                for (var i = 0, iLen = filedatas.length; i < iLen; i++) {
+                    filedata = filedatas[i];
 
-                var xhr = new XMLHttpRequest({
-                    mozSystem: true
-                });
-                xhr.open('GET', imgLink, true);
-                xhr.responseType = 'blob';
-                xhr.onprogress = function(filedata, progress, e) {
-                    if (e.lengthComputable) {
-                        var percentComplete = e.loaded / e.total;
-                        progress.update(percentComplete);
-                    } else {
-                        // Unable to compute progress information since the total size is unknown
-                    }
-                }.bind(xhr, filedata, progress);
-                xhr.onload = function(filedata, progress, e) {
-                    var blob = xhr.response;
-                    try {
-                        self.getDeviceStorage(function(storage) {
-                            var d = new Date(filedata.date);
-                            d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-                            var filename = 'photo/' + d.toISOString().slice(0, -5).replace(/[:T]/g, '-') + '.jpg';
+                    utils.overlay.oncancel = function() {
+                        utils.overlay.hide();
+                    };
 
-                            var saveRequest = storage.addNamed(blob, filename);
-                            saveRequest.onsuccess = (function() {
-                                // Vibrate when the image is saved
-                                navigator.vibrate(100);
+                    // Try to get the best fitting image link
+                    var imgLink = filedata.href.linkLRG || filedata.href.linkMED || filedata.href.linkSM || filedata.href.linkTN || filedata.href.linkUnknown;
 
-                                // Display filename in a notification
-                                self.notify('Photo saved to Gallery', filename);
-                            }).bind(this);
+                    var xhr = new XMLHttpRequest({
+                        mozSystem: true
+                    });
+                    xhr.open('GET', imgLink, true);
+                    xhr.responseType = 'blob';
+                    xhr.onprogress = function(filedata, progress, i, e) {
+                        if (e.lengthComputable) {
+                            var percentComplete = e.loaded / e.total;
+                            progressTotal[i] = percentComplete;
+                            var sum = progressTotal.reduce(function(a, b) {
+                                return a + b;
+                            }, 0);
+                            progress.update(sum);
+                        } else {
+                            // Unable to compute progress information since the total size is unknown
+                        }
+                    }.bind(xhr, filedata, progress, i);
+                    xhr.onload = function(filedata, progress, i, e) {
+                        var blob = xhr.response;
+                        try {
+                            self.getDeviceStorage(function(storage) {
+                                var d = new Date(filedata.date);
+                                d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+                                var filename = 'photo/' + d.toISOString().slice(0, -5).replace(/[:T]/g, '-') + '.jpg';
 
-                            saveRequest.onerror = (function() {
-                                navigator.vibrate(100);
-                                self.notify('Saving the photo failed', saveRequest.error.name);
-                            }).bind(this);
-                        });
-                    } catch (e) {
-                        navigator.vibrate(100);
-                        self.notify('Saving the photo failed', e.toString());
-                    }
+                                var saveRequest = storage.addNamed(blob, filename);
+                                if (saveRequest !== null) {
+                                    saveRequest.onsuccess = (function(filename, i) {
+                                        if (filedatas.length === 1) {
+                                            // Vibrate when the image is saved
+                                            navigator.vibrate(100);
 
-                    utils.overlay.hide();
+                                            // Display filename in a notification
+                                            self.notify('Photo saved to Gallery', filename);
 
-                }.bind(xhr, filedata, progress);
-                xhr.send();
+                                            var sum = progressTotal.reduce(function(a, b) {
+                                                return a + b;
+                                            }, 0);
+                                            if (sum === filedatas.length) {
+                                                utils.overlay.hide();
+                                            }
+                                        }
+                                    }).bind(this, filename, i);
+
+                                    saveRequest.onerror = (function(i) {
+                                        progressTotal[i] = 1;
+                                        navigator.vibrate(100);
+                                        self.notify('Saving the photo failed', saveRequest.error.name);
+
+                                        var sum = progressTotal.reduce(function(a, b) {
+                                            return a + b;
+                                        }, 0);
+                                        if (sum === filedatas.length) {
+                                            utils.overlay.hide();
+                                        }
+                                    }).bind(this, i);
+                                }
+                            });
+                        } catch (e) {
+                            navigator.vibrate(100);
+                            self.notify('Saving the photo failed', e.toString());
+                        }
+
+                        var sum = progressTotal.reduce(function(a, b) {
+                            return a + b;
+                        }, 0);
+                        if (sum === filedatas.length) {
+                            utils.overlay.hide();
+                        }
+
+                    }.bind(xhr, filedata, progress, i);
+                    xhr.send();
+                }
             }
         },
 

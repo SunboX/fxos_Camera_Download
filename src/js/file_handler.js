@@ -62,6 +62,15 @@
             return null;
         },
 
+        getFileByName: function(filename) {
+            for (var i = 0, iLen = this.files.length; i < iLen; i++) {
+                if (this.files[i].name === filename) {
+                    return this.files[i];
+                }
+            }
+            return null;
+        },
+
         getFiles: function() {
             return this.files;
         },

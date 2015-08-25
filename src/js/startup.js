@@ -60,6 +60,12 @@ thumbnailReloadButton.onclick = function() {
     thumbnailLoadingIndicator.hidden = false;
 };
 
+var thumbnailDownloadButton = $('thumbnail-download-button-tiny');
+thumbnailDownloadButton.onclick = function() {
+    var files = thumbnails.getAllCheckedFiles();
+    imageDownloader.downloadImages(files);
+};
+
 var thumbnailBackButton = $('back-to-device-selection');
 thumbnailBackButton.onclick = function() {
     setView(LAYOUT_MODE.deviceSelect);
