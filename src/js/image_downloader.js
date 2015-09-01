@@ -1,10 +1,5 @@
 'use strict';
 
-
-//var progress = utils.overlay.show('Downloading Image', 'progressBar');
-//progress.setTotal(1);
-//progress.update(0.5);
-
 (function(exports) {
 
     function ImageDownloader() {
@@ -37,7 +32,7 @@
                 filedata;
             if (filedatas && filedatas.length) {
 
-                var progress = utils.overlay.show('Downloading Image', 'progressBar');
+                var progress = utils.overlay.show('Downloading Image' + (filedatas.length === 1 ? '' : 's'), 'progressBar');
                 progress.setTotal(filedatas.length);
 
                 var progressTotal = [];
@@ -61,10 +56,7 @@
                         if (e.lengthComputable) {
                             var percentComplete = e.loaded / e.total;
                             progressTotal[i] = percentComplete;
-                            var sum = progressTotal.reduce(function(a, b) {
-                                return a + b;
-                            }, 0);
-                            progress.update(sum);
+                            self.checkIfDownloadIsFinished(filedatas, progressTotal, progress, i);
                         } else {
                             // Unable to compute progress information since the total size is unknown
                         }
@@ -80,50 +72,59 @@
                                 var saveRequest = storage.addNamed(blob, filename);
                                 if (saveRequest !== null) {
                                     saveRequest.onsuccess = (function(filename, i) {
-                                        if (filedatas.length === 1) {
-                                            // Vibrate when the image is saved
-                                            navigator.vibrate(100);
+                                        progressTotal[i] = 1;
 
-                                            // Display filename in a notification
-                                            self.notify('Photo saved to Gallery', filename);
+                                        self.checkIfDownloadIsFinished(filedatas, progressTotal, progress, i);
 
-                                            var sum = progressTotal.reduce(function(a, b) {
-                                                return a + b;
-                                            }, 0);
-                                            if (sum === filedatas.length) {
-                                                utils.overlay.hide();
-                                            }
-                                        }
                                     }).bind(this, filename, i);
 
                                     saveRequest.onerror = (function(i) {
                                         progressTotal[i] = 1;
-                                        navigator.vibrate(100);
-                                        self.notify('Saving the photo failed', saveRequest.error.name);
 
-                                        var sum = progressTotal.reduce(function(a, b) {
-                                            return a + b;
-                                        }, 0);
-                                        if (sum === filedatas.length) {
-                                            utils.overlay.hide();
-                                        }
+                                        //self.notify('Saving the Image failed', saveRequest.error.name);
+
+                                        self.checkIfDownloadIsFinished(filedatas, progressTotal, progress, i);
+
                                     }).bind(this, i);
+                                } else {
+                                    progressTotal[i] = 1;
+
+                                    //self.notify('Saving the Image failed', null);
+
+                                    self.checkIfDownloadIsFinished(filedatas, progressTotal, progress, i);
                                 }
                             });
                         } catch (e) {
-                            navigator.vibrate(100);
-                            self.notify('Saving the photo failed', e.toString());
+                            //self.notify('Saving the Image failed', e.toString());
+                            self.checkIfDownloadIsFinished(filedatas, progressTotal, progress, i);
                         }
 
-                        var sum = progressTotal.reduce(function(a, b) {
-                            return a + b;
-                        }, 0);
-                        if (sum === filedatas.length) {
-                            utils.overlay.hide();
-                        }
+                        self.checkIfDownloadIsFinished(filedatas, progressTotal, progress, i);
 
                     }.bind(xhr, filedata, progress, i);
                     xhr.send();
+                }
+            }
+        },
+
+        checkIfDownloadIsFinished: function(filedatas, progressTotal, progress, i) {
+            var sum = progressTotal.reduce(function(a, b) {
+                return a + b;
+            }, 0);
+
+            progress.update(sum);
+
+            if (sum === filedatas.length) {
+                utils.overlay.hide();
+
+                // Vibrate when the image is saved
+                navigator.vibrate(100);
+
+                // Display filename in a notification
+                if (filedatas.length === 1) {
+                    this.notify('Download finished', filename);
+                } else {
+                    this.notify('Downloads finished', filedatas.length + ' Images saved');
                 }
             }
         },
@@ -137,10 +138,10 @@
                 var state = availreq.result;
                 if (state === 'unavailable') {
                     navigator.vibrate(100);
-                    self.notify('Saving the photo failed', 'No SD-Card');
+                    self.notify('Saving the Image failed', 'No SD-Card');
                 } else if (state === 'shared') {
                     navigator.vibrate(100);
-                    self.notify('Saving the photo failed', 'SD-Card is in use');
+                    self.notify('Saving the Image failed', 'SD-Card is in use');
                 } else if (state === 'available') {
                     var freereq = storage.freeSpace();
                     freereq.onsuccess = (function() {
@@ -152,21 +153,21 @@
                     }).bind(this);
                     freereq.onerror = (function() {
                         navigator.vibrate(100);
-                        self.notify('Saving the photo failed', freereq.error && freereq.error.name);
+                        self.notify('Saving the Image failed', freereq.error && freereq.error.name);
                     }).bind(this);
                 }
             }).bind(this);
 
             availreq.onerror = (function() {
                 navigator.vibrate(100);
-                self.notify('Saving the photo failed', freereq.error && freereq.error.name);
+                self.notify('Saving the Image failed', freereq.error && freereq.error.name);
             }).bind(this);
         },
 
         notify: function(title, body) {
             var notification = new window.Notification(title, {
                 body: body,
-                icon: '/style/icons/Gallery.png',
+                icon: '/style/icons/download_notification.png',
                 tag: 'photo:' + (new Date().getTime())
             });
 
