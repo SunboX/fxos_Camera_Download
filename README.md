@@ -3,6 +3,18 @@ This app allows to view and download images from any DLNA / uPnP enabled photo c
 
 Connecting your camera with a Firefox OS smartphone via Wi-Fi you can enjoy sending high quality photos to your smartphone or tablet.
 
+## How it works (using a Sony NEX-6)
+
+* Turn on your camera, and select Menu → Playback → View on Smartphone
+* The camera should now enabled the WiFi mode and present you the SSID and password
+* Connect your Firefox OS device to the camera's WiFi using the given password
+* Now start the "Camera Download" app on your Firefox OS device
+* After some seconds, the NEX-6 camera should appear in the device list
+* Touch the list entry
+* Now you will see a thumbnail list of all the camera's images
+* Check the checkbox of one or more images and press the download button at the bottom
+* The images are imported to your SD card and are available in the Gallery app
+
 ## ToDo
 
 * Update the header layout
